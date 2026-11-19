@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0c1210">
+  <meta name="color-scheme" content="dark">
+  <title>{% block title %}FoodShare{% endblock %} · FoodShare</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=dark2">
+</head>
+<body class="theme-dark">
+<header class="topbar"><a class="brand" href="{{ url_for('home') if g.user else url_for('index') }}"><span class="brand-mark">f</span><span>food<span class="brand-green">share</span></span></a>
+  {% if g.user %}<nav class="main-nav"><a href="{{ url_for('home') }}" class="{{ 'active' if request.endpoint=='home' else '' }}">Home</a><a href="{{ url_for('donors') }}" class="{{ 'active' if request.endpoint=='donors' else '' }}">Donors</a><a href="{{ url_for('organizations') }}" class="{{ 'active' if request.endpoint=='organizations' else '' }}">Organizations</a><a href="{{ url_for('donations') }}" class="{{ 'active' if request.endpoint=='donations' else '' }}">Donations</a><a href="{{ url_for('food_requests') }}" class="{{ 'active' if request.endpoint=='food_requests' else '' }}">Requests</a><a href="{{ url_for('allocations') }}" class="{{ 'active' if request.endpoint=='allocations' else '' }}">Allocate</a><a href="{{ url_for('reports') }}" class="{{ 'active' if request.endpoint=='reports' else '' }}">Reports</a></nav><div class="user-menu"><span class="user-avatar">{{ g.user.name[0]|upper }}</span><span class="user-name">{{ g.user.name }}</span><form method="post" action="{{ url_for('logout') }}"><input type="hidden" name="csrf_token" value="{{ csrf_token }}"><button class="text-button">Sign out</button></form></div>
+  {% else %}<nav class="public-nav"><a href="#how-it-works">How it works</a><a href="{{ url_for('login') }}" class="login-link">Log in</a><a href="{{ url_for('register') }}" class="button button-small">Get started <span>↗</span></a></nav>{% endif %}
+</header>
+{% with messages = get_flashed_messages(with_categories=true) %}{% if messages %}<div class="flash-wrap">{% for category,message in messages %}<div class="flash flash-{{ category }}">{{ message }}</div>{% endfor %}</div>{% endif %}{% endwith %}
+<main>{% block content %}{% endblock %}</main>
+<footer class="footer"><a class="brand footer-brand" href="{{ url_for('index') }}"><span class="brand-mark">f</span><span>food<span class="brand-green">share</span></span></a><span>Good food. Shared with care.</span><span>© {{ current_year }} FoodShare</span></footer>
+</body></html>
